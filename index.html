@@ -397,16 +397,27 @@
       excelBtn.href = targetDriveUrl;
     }
 
-    // 6. Reproductor de Video
-    if (fileId) {
-      iframeEl.src = 'https://drive.google.com/file/d/' + fileId + '/preview';
-      iframeEl.style.display = 'block';
-      videoEl.style.display = 'none';
-    } else if (videoParam) {
+    // 6. Reproductor de Video Oficial (Directo / Streaming Inmediato)
+    if (videoParam) {
       const videoSrc = decodeURIComponent(videoParam);
       videoEl.src = videoSrc;
       videoEl.style.display = 'block';
       iframeEl.style.display = 'none';
+      videoEl.play().catch(() => {});
+    } else if (fileId) {
+      // Reproducción directa e inmediata del MP4 desde Google Drive sin esperas de transcodificación
+      const directStreamUrl = 'https://drive.google.com/uc?export=download&confirm=t&id=' + fileId;
+      videoEl.src = directStreamUrl;
+      videoEl.style.display = 'block';
+      iframeEl.style.display = 'none';
+      
+      videoEl.onerror = () => {
+        // Fallback a iframe oficial de Google Drive si el navegador bloquea cookies de terceros
+        iframeEl.src = 'https://drive.google.com/file/d/' + fileId + '/preview';
+        iframeEl.style.display = 'block';
+        videoEl.style.display = 'none';
+      };
+
       videoEl.play().catch(() => {});
     }
 
