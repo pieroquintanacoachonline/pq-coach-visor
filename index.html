@@ -8,15 +8,15 @@
        METADATOS OFICIALES PARA WHATSAPP / TELEGRAM / FACEBOOK
        Esto es lo que dibuja la imagen de tu logo arriba del enlace
        ======================================================== -->
-  <title>PQ Coach Online — Revisión de Técnica</title>
-  <meta name="title" content="PQ Coach Online — Revisión de Técnica">
-  <meta name="description" content="Revisión de técnica personalizada para atletas de PQ Coach Online.">
+  <title>PQ Coach Online</title>
+  <meta name="title" content="PQ Coach Online">
+  <meta name="description" content="PQ Coach Online — Asesoramiento y Rendimiento Deportivo.">
 
   <!-- Open Graph / WhatsApp Preview Card -->
   <meta property="og:type" content="video.other">
   <meta property="og:site_name" content="PQ Coach Online">
-  <meta property="og:title" content="PQ Coach Online — Revisión de Técnica">
-  <meta property="og:description" content="Revisión de técnica personalizada. Haz clic para ver el video en alta calidad.">
+  <meta property="og:title" content="PQ Coach Online">
+  <meta property="og:description" content="PQ Coach Online — Asesoramiento y Rendimiento Deportivo">
   <meta property="og:image" content="./assets/og-preview.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -24,8 +24,8 @@
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="PQ Coach Online — Revisión de Técnica">
-  <meta name="twitter:description" content="Revisión de técnica personalizada en video de alta calidad.">
+  <meta name="twitter:title" content="PQ Coach Online">
+  <meta name="twitter:description" content="PQ Coach Online — Asesoramiento y Rendimiento Deportivo">
   <meta name="twitter:image" content="./assets/og-preview.png">
 
   <style>
@@ -299,7 +299,7 @@
     <div class="athlete-badge" id="athlete-badge">
       <span class="athlete-name" id="badge-athlete">Atleta</span>
       <span class="badge-dot">•</span>
-      <span class="badge-date" id="badge-date">18 oct 2026</span>
+      <span class="badge-date" id="badge-date">Revisión</span>
     </div>
   </header>
 
@@ -308,22 +308,8 @@
     
     <!-- Reproductor Ultra HD -->
     <div class="video-card" id="video-card">
-      <video id="player-video" controls playsinline preload="auto" style="display:none; width:100%; height:100%; object-fit:contain;"></video>
+      <video id="player-video" controls autoplay playsinline preload="auto" style="display:block; width:100%; height:100%; object-fit:contain; background:#000;"></video>
       <iframe id="drive-embed" src="" allow="autoplay" allowfullscreen style="display:none; width:100%; height:100%; border:none;"></iframe>
-
-      <!-- Placeholder cuando aún no se reproduce video directo (NUNCA queda negro) -->
-      <div id="player-placeholder" class="player-placeholder">
-        <div class="placeholder-content">
-          <div class="placeholder-icon">🎥</div>
-          <h2 class="placeholder-title" id="placeholder-title">Revisión de Técnica PQ Coach</h2>
-          <p class="placeholder-desc" id="placeholder-desc">
-            Tu video personalizado en Ultra HD está listo. Haz clic en el botón de abajo para reproducirlo o acceder a tu carpeta oficial.
-          </p>
-          <a href="https://drive.google.com" id="placeholder-drive-btn" class="placeholder-btn" target="_blank">
-            <span>📁</span> Entrar a tu carpeta de Drive
-          </a>
-        </div>
-      </div>
     </div>
 
     <!-- Ficha informativa limpia -->
@@ -366,10 +352,8 @@
 
     const videoEl = document.getElementById('player-video');
     const iframeEl = document.getElementById('drive-embed');
-    const placeholderEl = document.getElementById('player-placeholder');
     const driveBtn = document.getElementById('link-direct-drive');
     const excelBtn = document.getElementById('link-excel-sheet');
-    const placeholderDriveBtn = document.getElementById('placeholder-drive-btn');
 
     // 1. Nombre del Atleta
     let athleteName = 'Atleta PQ';
@@ -405,7 +389,6 @@
       targetDriveUrl = decodeURIComponent(driveParam);
     }
     driveBtn.href = targetDriveUrl;
-    if (placeholderDriveBtn) placeholderDriveBtn.href = targetDriveUrl;
 
     // 5. Enlace directo a Planilla de Excel / Seguimiento
     if (excelParam) {
@@ -414,29 +397,24 @@
       excelBtn.href = targetDriveUrl;
     }
 
-    // 6. Reproductor de Video (Directo / Local / Drive / Placeholder)
-    if (videoParam) {
+    // 6. Reproductor de Video
+    if (fileId) {
+      iframeEl.src = 'https://drive.google.com/file/d/' + fileId + '/preview';
+      iframeEl.style.display = 'block';
+      videoEl.style.display = 'none';
+    } else if (videoParam) {
       const videoSrc = decodeURIComponent(videoParam);
       videoEl.src = videoSrc;
       videoEl.style.display = 'block';
       iframeEl.style.display = 'none';
-      placeholderEl.style.display = 'none';
       videoEl.play().catch(() => {});
-    } else if (fileId) {
-      iframeEl.src = 'https://drive.google.com/file/d/' + fileId + '/preview';
-      iframeEl.style.display = 'block';
-      videoEl.style.display = 'none';
-      placeholderEl.style.display = 'none';
-    } else {
-      videoEl.style.display = 'none';
-      iframeEl.style.display = 'none';
-      placeholderEl.style.display = 'flex';
     }
 
     // 7. Botón de WhatsApp con mensaje personalizado y directo al Coach
     const clientMsg = client ? ` de ${athleteName}` : '';
     const waText = encodeURIComponent(`Hola Coach! Tengo una duda sobre mi ${reviewType.toLowerCase()}${clientMsg}.`);
-    const waUrl = coachPhone ? `https://wa.me/${coachPhone.replace(/\+/g, '')}?text=${waText}` : `https://wa.me/?text=${waText}`;
+    const coachPhone = params.get('coach') || '51990601120';
+    const waUrl = `https://wa.me/${coachPhone.replace(/\+/g, '').trim()}?text=${waText}`;
     document.getElementById('link-whatsapp-coach').href = waUrl;
   </script>
 </body>
