@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ========================================================
+       METADATOS OFICIALES PARA WHATSAPP / TELEGRAM / FACEBOOK
+       Esto es lo que dibuja la imagen de tu logo arriba del enlace
+       ======================================================== -->
+  <title>PQ Coach Online — Revisión de Técnica</title>
+  <meta name="title" content="PQ Coach Online — Revisión de Técnica">
+  <meta name="description" content="Revisión de técnica personalizada para atletas de PQ Coach Online.">
+
+  <!-- Open Graph / WhatsApp Preview Card -->
+  <meta property="og:type" content="video.other">
+  <meta property="og:site_name" content="PQ Coach Online">
+  <meta property="og:title" content="PQ Coach Online — Revisión de Técnica">
+  <meta property="og:description" content="Revisión de técnica personalizada. Haz clic para ver el video en alta calidad.">
+  <meta property="og:image" content="./assets/og-preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/png">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="PQ Coach Online — Revisión de Técnica">
+  <meta name="twitter:description" content="Revisión de técnica personalizada en video de alta calidad.">
+  <meta name="twitter:image" content="./assets/og-preview.png">
+
+  <style>
+    :root {
+      --bg-dark: #0a0e1c;
+      --bg-card: #12182d;
+      --accent-blue: #2563eb;
+      --accent-light: #60a5fa;
+      --text-white: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-white);
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 28px 18px;
+    }
+
+    .header {
+      width: 100%;
+      max-width: 960px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 22px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 24px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* Logo más grande y con presencia */
+    .header img {
+      height: 64px;
+      max-width: 280px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    /* Badge con Nombre de Atleta y Fecha */
+    .athlete-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(37, 99, 235, 0.16);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      color: var(--text-white);
+      padding: 8px 18px;
+      border-radius: 24px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    .athlete-name {
+      color: var(--accent-light);
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .badge-dot {
+      color: rgba(255, 255, 255, 0.3);
+    }
+
+    .badge-date {
+      color: #cbd5e1;
+      font-size: 12px;
+    }
+
+    .main-container {
+      width: 100%;
+      max-width: 960px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .video-card {
+      background: #080c18;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+      position: relative;
+      aspect-ratio: 16 / 9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .video-card video, .video-card iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+      background: #000;
+    }
+
+    .player-placeholder {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(circle at center, #162044 0%, #0a0e1c 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+      z-index: 2;
+    }
+
+    .placeholder-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      max-width: 500px;
+    }
+
+    .placeholder-icon {
+      font-size: 52px;
+      filter: drop-shadow(0 6px 16px rgba(37, 99, 235, 0.5));
+    }
+
+    .placeholder-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .placeholder-desc {
+      font-size: 14px;
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+
+    .placeholder-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 6px;
+      padding: 12px 24px;
+      background: var(--accent-blue);
+      color: #fff;
+      font-weight: 700;
+      font-size: 14px;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .placeholder-btn:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+    }
+
+    .info-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 22px 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .section-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-white);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: -0.2px;
+    }
+
+    .actions-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    @media (min-width: 640px) {
+      .actions-bar {
+        flex-direction: row;
+        align-items: center;
+      }
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .btn-whatsapp {
+      background: #25d366;
+      color: #fff;
+      flex: 1.2;
+    }
+
+    .btn-whatsapp:hover {
+      background: #22c35e;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(37, 211, 102, 0.35);
+    }
+
+    .btn-excel {
+      background: rgba(16, 185, 129, 0.16);
+      color: #34d399;
+      border: 1.5px solid #10b981;
+      flex: 1;
+    }
+
+    .btn-excel:hover {
+      background: #10b981;
+      color: #fff;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
+    }
+
+    .btn-drive {
+      background: rgba(37, 99, 235, 0.16);
+      color: var(--accent-light);
+      border: 1.5px solid var(--accent-blue);
+      flex: 1;
+    }
+
+    .btn-drive:hover {
+      background: var(--accent-blue);
+      color: #fff;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+    }
+
+    .footer {
+      margin-top: auto;
+      padding-top: 40px;
+      color: var(--text-muted);
+      font-size: 12px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Encabezado con tu Logo Oficial (Más Grande) y Nombre/Fecha del Atleta -->
+  <header class="header">
+    <img src="./assets/logo-full.png" alt="PQ Coach Online">
+    <div class="athlete-badge" id="athlete-badge">
+      <span class="athlete-name" id="badge-athlete">Atleta</span>
+      <span class="badge-dot">•</span>
+      <span class="badge-date" id="badge-date">18 oct 2026</span>
+    </div>
+  </header>
+
+  <!-- Contenedor Principal -->
+  <main class="main-container">
+    
+    <!-- Reproductor Ultra HD -->
+    <div class="video-card" id="video-card">
+      <video id="player-video" controls playsinline preload="auto" style="display:none; width:100%; height:100%; object-fit:contain;"></video>
+      <iframe id="drive-embed" src="" allow="autoplay" allowfullscreen style="display:none; width:100%; height:100%; border:none;"></iframe>
+
+      <!-- Placeholder cuando aún no se reproduce video directo (NUNCA queda negro) -->
+      <div id="player-placeholder" class="player-placeholder">
+        <div class="placeholder-content">
+          <div class="placeholder-icon">🎥</div>
+          <h2 class="placeholder-title" id="placeholder-title">Revisión de Técnica PQ Coach</h2>
+          <p class="placeholder-desc" id="placeholder-desc">
+            Tu video personalizado en Ultra HD está listo. Haz clic en el botón de abajo para reproducirlo o acceder a tu carpeta oficial.
+          </p>
+          <a href="https://drive.google.com" id="placeholder-drive-btn" class="placeholder-btn" target="_blank">
+            <span>📁</span> Entrar a tu carpeta de Drive
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ficha informativa limpia -->
+    <div class="info-card">
+      <h1 class="section-title" id="section-title">
+        <span>🏋️‍♂️</span> <span id="label-title">Revisión de técnica</span>
+      </h1>
+
+      <div class="actions-bar">
+        <a href="#" class="btn btn-whatsapp" id="link-whatsapp-coach" target="_blank">
+          <span>💬</span> Déjame tu duda por WhatsApp
+        </a>
+        <a href="#" class="btn btn-excel" id="link-excel-sheet" target="_blank">
+          <span>📊</span> Planilla de Excel / Seguimiento
+        </a>
+        <a href="https://drive.google.com" class="btn btn-drive" id="link-direct-drive" target="_blank">
+          <span>📁</span> Carpeta de Drive
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    PQ Coach Online © 2026 • Asesoramiento y Rendimiento Deportivo
+  </footer>
+
+  <script>
+    // Parámetros por URL: ?cliente=Marcos&tipo=Revisión de técnica&fecha=18/10/2026&video=URL_O_PATH&id=FILE_ID&drive=DRIVE_URL
+    const params = new URLSearchParams(window.location.search);
+    const client = params.get('cliente');
+    const typeParam = params.get('tipo');
+    const dateParam = params.get('fecha');
+    const videoParam = params.get('video');
+    const fileId = params.get('id');
+    const folderId = params.get('folder');
+    const driveParam = params.get('drive');
+    const excelParam = params.get('excel');
+    const coachPhone = params.get('coach');
+
+    const videoEl = document.getElementById('player-video');
+    const iframeEl = document.getElementById('drive-embed');
+    const placeholderEl = document.getElementById('player-placeholder');
+    const driveBtn = document.getElementById('link-direct-drive');
+    const excelBtn = document.getElementById('link-excel-sheet');
+    const placeholderDriveBtn = document.getElementById('placeholder-drive-btn');
+
+    // 1. Nombre del Atleta
+    let athleteName = 'Atleta PQ';
+    if (client) {
+      athleteName = decodeURIComponent(client);
+      document.getElementById('badge-athlete').textContent = athleteName;
+      document.title = 'PQ Coach Online — Revisión de ' + athleteName;
+    } else {
+      document.getElementById('badge-athlete').textContent = athleteName;
+    }
+
+    // 2. Fecha automática o personalizada
+    if (dateParam) {
+      document.getElementById('badge-date').textContent = decodeURIComponent(dateParam);
+    } else {
+      const today = new Date();
+      const options = { day: 'numeric', month: 'short', year: 'numeric' };
+      document.getElementById('badge-date').textContent = today.toLocaleDateString('es-ES', options);
+    }
+
+    // 3. Apartado / Tipo de Revisión
+    const reviewType = typeParam ? decodeURIComponent(typeParam) : 'Revisión de técnica';
+    document.getElementById('label-title').textContent = reviewType;
+    document.getElementById('placeholder-title').textContent = `${reviewType} — ${athleteName}`;
+
+    // 4. Enlace directo a Google Drive (NUNCA un '#' que recargue la página)
+    let targetDriveUrl = 'https://drive.google.com';
+    if (folderId) {
+      targetDriveUrl = 'https://drive.google.com/drive/folders/' + folderId;
+    } else if (fileId) {
+      targetDriveUrl = 'https://drive.google.com/file/d/' + fileId + '/view';
+    } else if (driveParam) {
+      targetDriveUrl = decodeURIComponent(driveParam);
+    }
+    driveBtn.href = targetDriveUrl;
+    if (placeholderDriveBtn) placeholderDriveBtn.href = targetDriveUrl;
+
+    // 5. Enlace directo a Planilla de Excel / Seguimiento
+    if (excelParam) {
+      excelBtn.href = decodeURIComponent(excelParam);
+    } else {
+      excelBtn.href = targetDriveUrl;
+    }
+
+    // 6. Reproductor de Video (Directo / Local / Drive / Placeholder)
+    if (videoParam) {
+      const videoSrc = decodeURIComponent(videoParam);
+      videoEl.src = videoSrc;
+      videoEl.style.display = 'block';
+      iframeEl.style.display = 'none';
+      placeholderEl.style.display = 'none';
+      videoEl.play().catch(() => {});
+    } else if (fileId) {
+      iframeEl.src = 'https://drive.google.com/file/d/' + fileId + '/preview';
+      iframeEl.style.display = 'block';
+      videoEl.style.display = 'none';
+      placeholderEl.style.display = 'none';
+    } else {
+      videoEl.style.display = 'none';
+      iframeEl.style.display = 'none';
+      placeholderEl.style.display = 'flex';
+    }
+
+    // 7. Botón de WhatsApp con mensaje personalizado y directo al Coach
+    const clientMsg = client ? ` de ${athleteName}` : '';
+    const waText = encodeURIComponent(`Hola Coach! Tengo una duda sobre mi ${reviewType.toLowerCase()}${clientMsg}.`);
+    const waUrl = coachPhone ? `https://wa.me/${coachPhone.replace(/\+/g, '')}?text=${waText}` : `https://wa.me/?text=${waText}`;
+    document.getElementById('link-whatsapp-coach').href = waUrl;
+  </script>
+</body>
+</html>
