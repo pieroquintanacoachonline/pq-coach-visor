@@ -289,6 +289,41 @@
       font-size: 12px;
       text-align: center;
     }
+
+    /* Indicador animado de rotación de celular */
+    .rotate-hint {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      margin-top: 14px;
+      background: rgba(11, 64, 206, 0.45);
+      border: 1px solid rgba(0, 229, 255, 0.5);
+      padding: 8px 18px;
+      border-radius: 24px;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    @media (max-width: 768px) and (orientation: portrait) {
+      .rotate-hint {
+        display: inline-flex;
+      }
+    }
+
+    .rotate-phone-anim {
+      display: inline-flex;
+      animation: phoneTurn 2.6s ease-in-out infinite;
+      transform-origin: center;
+    }
+
+    @keyframes phoneTurn {
+      0%, 15% { transform: rotate(0deg); }
+      45%, 70% { transform: rotate(90deg); }
+      90%, 100% { transform: rotate(0deg); }
+    }
   </style>
 </head>
 <body>
@@ -307,7 +342,7 @@
   <main class="main-container">
     
     <!-- Reproductor Ultra HD -->
-    <div class="video-card" id="video-card" style="cursor: pointer;">
+    <div class="video-card" id="video-card">
       <video id="player-video" controls autoplay playsinline webkit-playsinline preload="auto" style="display:block; width:100%; height:100%; object-fit:contain; background:#000;"></video>
       <iframe id="drive-embed" src="" allow="autoplay" allowfullscreen style="display:none; width:100%; height:100%; border:none;"></iframe>
       <!-- Botón central grande de Reproducir -->
@@ -316,6 +351,16 @@
           <svg width="34" height="34" viewBox="0 0 24 24" fill="#ffffff" style="margin-left: 4px;"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
         </div>
         <span style="color: #fff; font-size: 13px; font-weight: 700; text-shadow: 0 2px 8px rgba(0,0,0,0.8); letter-spacing: 0.5px;">CLIC PARA REPRODUCIR</span>
+        <!-- Indicador animado que sugiere girar el celular si está en vertical -->
+        <div class="rotate-hint" id="rotate-hint">
+          <div class="rotate-phone-anim">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00E5FF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="5" y="2" width="14" height="20" rx="3" ry="3"></rect>
+              <line x1="12" y1="18" x2="12.01" y2="18"></line>
+            </svg>
+          </div>
+          <span>Gira tu celular en horizontal 📲</span>
+        </div>
       </div>
     </div>
 
@@ -421,16 +466,6 @@
 
     if (playOverlay) {
       playOverlay.addEventListener('click', toggleVideoPlay);
-    }
-
-    if (videoCard) {
-      videoCard.addEventListener('click', (e) => {
-        if (e.target.tagName.toLowerCase() === 'video' && e.offsetY > (videoCard.offsetHeight - 55)) {
-          // El usuario hizo clic en la barra nativa de controles
-          return;
-        }
-        toggleVideoPlay(e);
-      });
     }
 
     videoEl.addEventListener('play', () => {
