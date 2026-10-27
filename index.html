@@ -307,9 +307,16 @@
   <main class="main-container">
     
     <!-- Reproductor Ultra HD -->
-    <div class="video-card" id="video-card">
-      <video id="player-video" controls autoplay playsinline preload="auto" style="display:block; width:100%; height:100%; object-fit:contain; background:#000;"></video>
+    <div class="video-card" id="video-card" style="cursor: pointer;">
+      <video id="player-video" controls autoplay playsinline webkit-playsinline preload="auto" style="display:block; width:100%; height:100%; object-fit:contain; background:#000;"></video>
       <iframe id="drive-embed" src="" allow="autoplay" allowfullscreen style="display:none; width:100%; height:100%; border:none;"></iframe>
+      <!-- Botón central grande de Reproducir -->
+      <div id="center-play-overlay" style="position: absolute; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; pointer-events: auto; cursor: pointer; user-select: none; z-index: 10; transition: transform 0.2s;" onmouseenter="this.style.transform='scale(1.08)'" onmouseleave="this.style.transform='scale(1)'">
+        <div style="width: 76px; height: 76px; border-radius: 50%; background: linear-gradient(135deg, #0B40CE, #00E5FF); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 30px rgba(0, 229, 255, 0.7);">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="#ffffff" style="margin-left: 4px;"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
+        </div>
+        <span style="color: #fff; font-size: 13px; font-weight: 700; text-shadow: 0 2px 8px rgba(0,0,0,0.8); letter-spacing: 0.5px;">CLIC PARA REPRODUCIR</span>
+      </div>
     </div>
 
     <!-- Ficha informativa limpia -->
@@ -376,8 +383,10 @@
 
     // 3. Apartado / Tipo de Revisión
     const reviewType = typeParam ? decodeURIComponent(typeParam) : 'Revisión de técnica';
-    document.getElementById('label-title').textContent = reviewType;
-    document.getElementById('placeholder-title').textContent = `${reviewType} — ${athleteName}`;
+    const labelTitle = document.getElementById('label-title');
+    if (labelTitle) labelTitle.textContent = reviewType;
+    const placeholderTitle = document.getElementById('placeholder-title');
+    if (placeholderTitle) placeholderTitle.textContent = `${reviewType} — ${athleteName}`;
 
     // 4. Enlace directo a Google Drive (NUNCA un '#' que recargue la página)
     let targetDriveUrl = 'https://drive.google.com';
@@ -398,24 +407,71 @@
     }
 
     // 6. Reproductor de Video Oficial
-    if (fileId) {
-      // Reproductor oficial de Google Drive incrustado en pantalla completa
+    const playOverlay = document.getElementById('center-play-overlay');
+    const videoCard = document.getElementById('video-card');
+
+    function toggleVideoPlay(e) {
+      if (e) e.stopPropagation();
+      if (videoEl.paused) {
+        videoEl.play().catch(() => {});
+      } else {
+        videoEl.pause();
+      }
+    }
+
+    if (playOverlay) {
+      playOverlay.addEventListener('click', toggleVideoPlay);
+    }
+
+    if (videoCard) {
+      videoCard.addEventListener('click', (e) => {
+        if (e.target.tagName.toLowerCase() === 'video' && e.offsetY > (videoCard.offsetHeight - 55)) {
+          // El usuario hizo clic en la barra nativa de controles
+          return;
+        }
+        toggleVideoPlay(e);
+      });
+    }
+
+    videoEl.addEventListener('play', () => {
+      if (playOverlay) playOverlay.style.display = 'none';
+    });
+    videoEl.addEventListener('pause', () => {
+      if (playOverlay) playOverlay.style.display = 'flex';
+    });
+    videoEl.addEventListener('ended', () => {
+      if (playOverlay) playOverlay.style.display = 'flex';
+    });
+
+    if (videoParam) {
+      // Reproducción instantánea Ultra HD vía Cloudflare R2 Streaming
+      videoEl.src = videoParam;
+      videoEl.style.display = 'block';
+      iframeEl.style.display = 'none';
+      videoEl.load();
+      videoEl.addEventListener('loadedmetadata', () => {
+        try {
+          if (videoEl.currentTime === 0 && videoEl.duration > 0.5) {
+            videoEl.currentTime = 0.2;
+          }
+        } catch (e) {}
+      });
+      videoEl.play().catch(() => {
+        if (playOverlay) playOverlay.style.display = 'flex';
+      });
+    } else if (fileId) {
+      if (playOverlay) playOverlay.style.display = 'none';
+      // Fallback a reproductor de Google Drive incrustado
       iframeEl.src = 'https://drive.google.com/file/d/' + fileId + '/preview';
       iframeEl.style.display = 'block';
       videoEl.style.display = 'none';
-    } else if (videoParam) {
-      const videoSrc = decodeURIComponent(videoParam);
-      videoEl.src = videoSrc;
-      videoEl.style.display = 'block';
-      iframeEl.style.display = 'none';
-      videoEl.play().catch(() => {});
     }
 
     // 7. Botón de WhatsApp con mensaje personalizado y directo al Coach
     const clientMsg = client ? ` de ${athleteName}` : '';
     const waText = encodeURIComponent(`Hola Coach! Tengo una duda sobre mi ${reviewType.toLowerCase()}${clientMsg}.`);
-    const coachPhone = params.get('coach') || '51990601120';
-    const waUrl = `https://wa.me/${coachPhone.replace(/\+/g, '').trim()}?text=${waText}`;
+    const finalPhone = coachPhone || '51990601120';
+    const waUrl = `https://wa.me/${finalPhone.replace(/\+/g, '').trim()}?text=${waText}`;
     document.getElementById('link-whatsapp-coach').href = waUrl;
   </script>
 </body>
